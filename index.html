@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8" />
+    <title>DIIスコア計算</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <h1>DIIスコア計算</h1>
+    <form id="form" style="display:none">
+        <div class="item" id="food-form"></div>
+        <div class="item">
+            <label><strong>強化米を使っていますか？</strong></label><br>
+            <label><input type="radio" name="rice_used" value="なし" checked>なし</label>
+            <label><input type="radio" name="rice_used" value="あり">あり</label>
+        </div>
+        <div class="item" id="rice-options" style="display: none; margin-left: 1em;">
+            <p>以下から選択してください(複数可)</p>
+            <label><input type="checkbox" name="rice_choice" value="強化米">強化米</label><br>
+            <label><input type="checkbox" name="rice_choice" value="麦ご飯">麦(七分つき押し麦)</label><br>
+            <label><input type="checkbox" name="rice_choice" value="胚芽精米">胚芽精米</label><br>
+            <label><input type="checkbox" name="rice_choice" value="玄米">玄米</label>
+        </div>
+        <button type="submit">送信</button>
+    </form>
+    <!-- 栄養素テーブル表示エリア -->
+    <h3>栄養素の合計</h3>
+    <table id="result-table" border="1">
+        <thead>
+            <tr>
+                <th>栄養素</th>
+                <th>量</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <script type="module" src="./js/script.js"></script>
+    <!-- <script src="./js/app.js"></script> -->
+</body>
+</html>
