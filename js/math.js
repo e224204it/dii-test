@@ -1,7 +1,7 @@
 import { normDist } from "./normDict.js";
 
 let diiParams = {};
-fetch("./data/csvjson.json")
+fetch("./data/dii_param.json")
     .then(res => res.json())
     .then(data => {
         data.forEach(row => {
