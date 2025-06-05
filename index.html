@@ -8,32 +8,31 @@
 <body>
     <h1>DIIスコア計算</h1>
     <form id="form">
-  <div id="food-form"></div>
+        <div id="food-form"></div>
+        <div id="rice-section" style="display: none; margin-left: 1em; border: 1px solid #ccc; padding: 10px;">
+            <p><strong>強化米を使っていますか？</strong></p>
+            <label><input type="radio" name="rice_used" value="なし" checked> なし</label>
+            <label><input type="radio" name="rice_used" value="あり"> あり</label>
+            <div id="rice-options" style="display:none; margin-top: 0.5em;">
+                <p>以下から選択してください（複数可）:</p>
+                <label><input type="checkbox" name="rice_choice" value="麦ご飯"> 麦ご飯</label><br>
+                <label><input type="checkbox" name="rice_choice" value="玄米"> 玄米</label>
+            </div>
+        </div>
+        <button type="submit">送信</button>
+    </form>
 
-  <!-- 強化米セクション（ご飯を選んだときだけ表示） -->
-  <div id="rice-section" style="display: none; margin-left: 1em; border: 1px solid #ccc; padding: 10px;">
-    <p><strong>強化米を使っていますか？</strong></p>
-    <label><input type="radio" name="rice_used" value="なし" checked> なし</label>
-    <label><input type="radio" name="rice_used" value="あり"> あり</label>
-
-    <div id="rice-options" style="display:none; margin-top: 0.5em;">
-      <p>以下から選択してください（複数可）:</p>
-      <label><input type="checkbox" name="rice_choice" value="麦ご飯"> 麦ご飯</label><br>
-      <label><input type="checkbox" name="rice_choice" value="玄米"> 玄米</label>
-    </div>
-  </div>
-
-  <button type="submit">送信</button>
-</form>
-
-<!-- 表で結果表示 -->
-<h3>栄養素の合計</h3>
-<table id="result-table" border="1">
-  <thead><tr><th>栄養素</th><th>DIIスコア</th></tr></thead>
-  <tbody></tbody>
-</table>
-<pre id="result"></pre>
-
+    <h3>栄養素の合計</h3>
+    <table id="result-table" border="1">
+        <thead>
+            <tr>
+                <th>栄養素</th>
+                <th>DIIスコア</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <pre id="result"></pre>
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
     <script type="module" src="./js/script.js"></script>
     <script type="module" src="./js/math.js"></script>
