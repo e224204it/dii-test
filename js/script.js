@@ -38,7 +38,9 @@ window.toggleAmountInput = function (food) {
     document.getElementById(`form_${food}`).style.display = display;
 }
 
+let allFoodNames = [];
 function generateForm(foodNames) {
+    allFoodNames = foodNames;
     const container = document.getElementById("food-form");
     foodNames.forEach(food => {
         const foodId = `form_${food}`;
@@ -50,7 +52,7 @@ function generateForm(foodNames) {
             <label><strong>${food}</strong></label><br>
             ${radios}<br>
             <div id="${foodId}" style="display:none">
-                <input type="number" name="amt_${food}" value="1" min="0" step="0.5"> 一日当たりの摂取量
+                <input type="number" name="amt_${food}" value="1" min="0" step="0.1"> 一日当たりの摂取量
             </div><br>
         `;
         container.appendChild(div);
@@ -73,9 +75,20 @@ document.addEventListener("change", function () {
 });
 
 // フォーム送信処理
-const nut_total = {};
+let nut_total = {};
 document.getElementById("form").addEventListener("submit", function (e) {
     e.preventDefault();
+    const errorDiv = document.getElementById("form-error");
+    errorDiv.textContent = "";  //前回のエラーをクリア
+    
+    // 未選択の食品チェック
+    for(const food of allFoodNames){
+        const selected = document.querySelector(`input[name="freq_${food}"]:checked`);
+        if(!selected){
+            errorDiv.textContent = `「${food}」の摂取頻度を選択してください`;
+            return;
+        }
+    }
     const formData = new FormData(e.target);
     const result = {};
     let tmp_rice = [];
@@ -134,7 +147,7 @@ document.getElementById("form").addEventListener("submit", function (e) {
     }
     showTotalInTable(nut_total, tea_combined);
     document.dispatchEvent(new CustomEvent("DII_READY", { detail: nut_total }));  //DIIスコア計算イベントを発火
-
+    nut_total = {};
 });
 
 document.addEventListener("DII_RESULT", e => {
@@ -161,7 +174,7 @@ function showTotalInTable(total, diiScores = {}, totalDii = null) {
         const tr = document.createElement("tr");
         const value = total[nut].toFixed(3);
         const dii = diiScores[nut] !== undefined ? diiScores[nut].toFixed(3) : "-";
-        tr.innerHTML = `<td>${nut}</td><td>${dii}</td>`;
+        tr.innerHTML = `<td>${nut}</td><td>${value}</td><td>${dii}</td>`;
         tbody.appendChild(tr);
     }
     if (totalDii !== null) {
