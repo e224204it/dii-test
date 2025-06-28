@@ -79,7 +79,7 @@ let nut_total = {};
 document.getElementById("form").addEventListener("submit", function (e) {
     e.preventDefault();
     const errorDiv = document.getElementById("form-error");
-    errorDiv.textContent = "";  //前回のエラーをクリア
+    errorDiv.textContent = "";
     
     // 未選択の食品チェック
     for(const food of allFoodNames){
