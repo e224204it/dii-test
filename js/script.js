@@ -52,7 +52,7 @@ function generateForm(foodNames) {
             <label><strong>${food}</strong></label><br>
             ${radios}<br>
             <div id="${foodId}" style="display:none">
-                <input type="number" name="amt_${food}" value="1" min="0" step="0.01"> 一日当たりの摂取量
+                <input type="number" name="amt_${food}" value="1" min="0" step="0.1"> 一日当たりの摂取量
             </div><br>
         `;
         container.appendChild(div);
