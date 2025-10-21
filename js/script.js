@@ -59,7 +59,7 @@ function generateForm(foodNames) {
             </label>
         `).join("");
         div.innerHTML = `
-            <label><strong>${food}</strong></label><br>
+            <label>${food}</label><br>
             ${radios}<br>
             <div id="${foodId}" style="display:none">
                 <input type="number" name="amt_${food}" value="1" min="0.5" max="5" step="0.5"> 一日当たりの摂取量
@@ -219,3 +219,4 @@ function showTotalInTable(total, diiScores = {}, totalDii = null) {
 }
 
 export default nut_total;
+
