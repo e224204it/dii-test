@@ -1,5 +1,8 @@
+// import { energy, carbohydrates, protein, lipid, fattyAcids, cholesterol } from "./message";
+
 let foodsData = {};
 let diiParams = {};
+let riceFoodKey = null;
 
 const freqMap = {
     "毎日": 1, "週5-6": 5.5 / 7, "週2-4": 3 / 7, "週1": 1 / 7, "月1-3": 1 / 15, "無": 0
@@ -25,7 +28,11 @@ Promise.all([
     const foodNames = [];
     for (const food of Object.keys(foodsData)) {
         foodNames.push(food);
-        if (food.includes("ワイン・カクテル")) break;
+        // foods_data.json 内の表記に合わせて『ご飯』に該当するキーを保持
+        if (!riceFoodKey && food.includes("ご飯")) {
+            riceFoodKey = food;
+        }
+        if (food.includes("ワイン･カクテル100ml")) break;
     }
 
     generateForm(foodNames);
@@ -46,32 +53,46 @@ function generateForm(foodNames) {
         const foodId = `form_${food}`;
         const div = document.createElement("div");
         const radios = Object.keys(freqMap).map(f => `
-            <label><input type="radio" name="freq_${food}" value="${f}" onchange="toggleAmountInput('${food}')">${f}</label>
+            <label>
+                <input type="radio" name="freq_${food}" value="${f}" onchange="toggleAmountInput('${food}')" ${f === "週2-4" ? "checked" : ""}>
+                ${f}
+            </label>
         `).join("");
         div.innerHTML = `
             <label><strong>${food}</strong></label><br>
             ${radios}<br>
             <div id="${foodId}" style="display:none">
-                <input type="number" name="amt_${food}" value="1" min="0" step="0.1"> 一日当たりの摂取量
+                <input type="number" name="amt_${food}" value="1" min="0.5" max="5" step="0.5"> 一日当たりの摂取量
             </div><br>
         `;
         container.appendChild(div);
+        // 初期表示を正しくセット
+        toggleAmountInput(food);
     });
 }
 
 // ご飯を選んだら強化米アンケート表示
 document.addEventListener("change", function () {
-    const gohan = document.querySelector('input[name="freq_ご飯"]:checked');
     const riceSection = document.getElementById("rice-section");
+    let gohan = null;
+    if (riceFoodKey) {
+        gohan = document.querySelector(`input[name="freq_${riceFoodKey}"]:checked`);
+    } else {
+        // fallback: check any generated freq_ inputs whose name contains 'ご飯'
+        const any = document.querySelectorAll('input[name^="freq_"]');
+        any.forEach(el => {
+            if (el.name.includes('ご飯') && el.checked) gohan = el;
+        });
+    }
+
     if (gohan && freqMap[gohan.value] > 0) {
         riceSection.style.display = "block";
+        // ご飯にチェックが入った時点で米のチェックリストを表示
+        document.getElementById("rice-options").style.display = "block";
     } else {
         riceSection.style.display = "none";
         document.getElementById("rice-options").style.display = "none";
     }
-
-    const riceUsed = document.querySelector('input[name="rice_used"]:checked')?.value;
-    document.getElementById("rice-options").style.display = riceUsed === "あり" ? "block" : "none";
 });
 
 // フォーム送信処理
@@ -100,12 +121,15 @@ document.getElementById("form").addEventListener("submit", function (e) {
             result[food] = freq * amt;
         }
     }
-    if (result["ご飯"] && result["ご飯"] > 0) {
+    const riceKeyForResult = riceFoodKey || "ご飯";
+    if (result[riceKeyForResult] && result[riceKeyForResult] > 0) {
         const riceUsed = formData.get("rice_used");
         if (riceUsed === "あり") {
             const selected = [...document.querySelectorAll('input[name="rice_choice"]:checked')].map(el => el.value);
+            // 白米は特に処理なし。麦ご飯と玄米だけ tmp_rice にマップ
             if (selected.includes("麦ご飯")) tmp_rice.push(1);
             if (selected.includes("玄米")) tmp_rice.push(2);
+            // 白米が選択されていても特別な処理は不要
         } else {
             tmp_rice = [0];
         }
@@ -123,7 +147,7 @@ document.getElementById("form").addEventListener("submit", function (e) {
         }
     }
     const riceMap = { 1: "麦ご飯", 2: "玄米" };
-    const riceBaseAmout = result["ご飯"] || 0;
+    const riceBaseAmout = result[riceKeyForResult] || 0;
     tmp_rice.forEach(code => {
         const food = riceMap[code];
         const riceNutrient = foodsData[food];
@@ -153,6 +177,14 @@ document.getElementById("form").addEventListener("submit", function (e) {
 document.addEventListener("DII_RESULT", e => {
     const { nut_total, diiScores, totalDiiScore } = e.detail;
     showTotalInTable(nut_total, diiScores, totalDiiScore);
+    const messageDiv1 = document.getElementById("message1");
+    let message = "";
+    if(totalDiiScore <= -1.5) message = "抗炎症効果の高い食事ができています。";
+    else if(totalDiiScore <= -0.5) message = "抗炎症効果のある食事ができています。";
+    else if(totalDiiScore <= 0.5) message = "あなたの食事炎症性は標準的です。抗炎症性効果の高い食品も取り入れてみましょう。";
+    else if(totalDiiScore <= 1.5) message = "あなたの食事の炎症性はやや高いです。炎症性の高い項目を見直し、抗炎症効果のある食品を取り入れましょう。";
+    else message = "あなたの食事の炎症性は高いです。炎症性の高い項目を見直して、抗炎症効果のある食品に置き換えてみましょう。";
+    messageDiv1.textContent = message;
 });
 
 const excludeKeys = [
@@ -177,10 +209,12 @@ function showTotalInTable(total, diiScores = {}, totalDii = null) {
         tr.innerHTML = `<td>${nut}</td><td>${value}</td><td>${dii}</td>`;
         tbody.appendChild(tr);
     }
-    if (totalDii !== null) {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `<td><strong>総合DIIスコア</strong></td><td colspan="2">${totalDii.toFixed(3)}</td>`;
-        tbody.appendChild(tr);
+    // 表の上にある専用領域に総合DIIを表示（存在しない場合はクリア）
+    const totalDiiDiv = document.getElementById('total-dii');
+    if (totalDii !== null && totalDii !== undefined) {
+        totalDiiDiv.innerHTML = `<strong>総合DII:</strong> ${totalDii.toFixed(3)}`;
+    } else {
+        totalDiiDiv.innerHTML = "";
     }
 }
 
