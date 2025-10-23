@@ -20,7 +20,7 @@ body {
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.05);
+    background: rgba(0, 0, 0, 0.1);
 }
 
 .item {
@@ -38,4 +38,5 @@ th, td {
     border: 1px solid black;
     padding: 8px;
 }
+
 
