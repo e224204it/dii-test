@@ -72,7 +72,7 @@
 
             // 合計 DII を計算（全成分の合計）
             const totalDii = Object.values(dii).reduce((s, v) => s + (parseFloat(v) || 0), 0);
-            summary.textContent = `あなたのDIIは ${totalDii.toFixed(4)} です。`;
+            summary.textContent = `あなたのDIIは ${totalDii.toFixed(3)} です。`;
 
             // DII 判定基準の表示
             // const diiLegend = document.getElementById('diiLegend');
@@ -156,12 +156,12 @@
                 if (nKey) {
                     const raw = nutrition[nKey];
                     const num = parseFloat(raw);
-                    totalVal = !isNaN(num) ? num.toFixed(4) : String(raw);
+                    totalVal = !isNaN(num) ? num.toFixed(3) : String(raw);
                 }
                 tdTotal.textContent = totalVal;
 
                 const tdDii = document.createElement('td');
-                tdDii.textContent = (dii && typeof dii[base] !== 'undefined') ? Number(dii[base]).toFixed(6) : '';
+                tdDii.textContent = (dii && typeof dii[base] !== 'undefined') ? Number(dii[base]).toFixed(3) : '';
 
                 tr.appendChild(tdName);
                 tr.appendChild(tdTotal);
