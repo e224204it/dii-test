@@ -1,14 +1,8 @@
 // 正規分布の確率密度関数（PDF）と累積分布関数（CDF）
-function normDist(x, mean, stdDev, cumulative){
-    if(!cumulative){
-        // 確率密度関数（PDF）
-        const exponent = -Math.pow(x - mean, 2) / (2 * Math.pow(stdDev, 2));
-        return (1 / (stdDev * Math.sqrt(2 * Math.PI))) * Math.exp(exponent);
-    }else{
+function normDist(x, mean, stdDev){
         // 累積分布関数（CDF） using erf approximation
         const z = (x - mean) / (stdDev * Math.sqrt(2));
         return 0.5 * (1 + erf(z));
-    }
 }
 
 // 誤差関数 erf の近似（数値計算による近似式）
