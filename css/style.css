@@ -1,42 +1,150 @@
+.frequency-group {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 10px;
+    margin: 10px auto;
+    width: fit-content;
+    justify-items: center;
+    justify-content: center;
+}
+
+.frequency-group div {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.intake-group {
+    margin: 10px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.input-control {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    justify-content: center;
+}
+
+.input-control input[type="number"] {
+    width: 80px;
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center;
+}
+
+/* 数値入力のスピンボタンを非表示にする */
+.input-control input[type="number"]::-webkit-inner-spin-button,
+.input-control input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.quantity-btn {
+    width: 25px;
+    height: 25px;
+    border: 1px solid #ccc;
+    background-color: #f8f8f8;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    line-height: 1;
+    padding: 0;
+}
+
+.quantity-btn:hover {
+    background-color: #e8e8e8;
+}
+
+.quantity-btn:active {
+    background-color: #ddd;
+}
+
+.form-controls {
+    margin-top: 16px;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.form-controls button {
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: 1px solid #bbb;
+    background: #f4f4f4;
+    cursor: pointer;
+}
+
+.form-controls button:hover {
+    background: #eaeaea;
+}
+
+.form-message {
+    color: #b00020;
+    font-weight: 600;
+}
+
+.progress-wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.progress-text {
+    font-weight: 700;
+}
+
+.progress-wrap .progress-bg {
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+}
+
+.progress-wrap .progress-bg { background: #eee; height: 10px; border-radius: 6px; overflow: hidden; margin-top: 6px; }
+
+.progress-wrap .progress-bar { height: 100%; background: #4caf50; }
+
+.rice-group {
+    margin: 8px auto 12px auto;
+    padding: 6px 8px;
+    background: #fafafa;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+.rice-group p {
+    margin: 0 0 6px 0;
+    font-weight: 600;
+}
+
+.rice-group div {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 4px 0;
+}
+
+hr {
+    margin: 20px 0;
+    border: none;
+    border-top: 3px solid white; /* thicker separator */
+    height: 0;
+}
+
+/* 全体を中央揃えにする */
 body {
-    font-family: sans-serif;
-    padding: 20px;
+    text-align: center;
 }
 
-.bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url(./../img/bg2.jpg);
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    z-index: -1;
-}
-
-.bg::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.1);
-}
-
-.item {
-    margin-bottom: 15px;
-}
-
-table {
-    border-collapse: collapse;
-    margin-top: 20px;
-    width: 100%;
-    background-color: white;
-}
-
+/* テーブルセルも中央揃え */
 th, td {
-    border: 1px solid black;
-    padding: 8px;
+    text-align: center;
 }
-
-
