@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    html, body { height: 100%; }
+    body {
+        font-family: Arial, "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+        padding: 24px;
+        margin: 0;
+        background-image: url('img/bg.jpg');
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-attachment: fixed;
+        color: #111;
+    }
+    body::before {
+        content: '';
+        position: fixed;
+        left: 0; top: 0; right: 0; bottom: 0;
+        /* background: rgba(0, 0, 0, 0); */
+        pointer-events: none;
+    }
+</style>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <h1>DIIアプリ</h1>
+    <div id="food-form"></div>
+
+    <script type="module" src="./js/script.js"></script>
+</body>
+</html>

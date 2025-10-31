@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html, body { height: 100%; }
+        #test {
+            margin: auto;
+        }
+        body {
+            font-family: Arial, "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+            padding: 24px;
+            margin: center;
+            /* background image fixed */
+            background-image: url('img/bg.jpg');
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            /* overlay for content readability */
+            color: #111;
+            position: relative;
+        }
+        /* Optional: dim the background behind the main content for contrast */
+        body::before {
+            content: '';
+            position: fixed;
+            left: 0; top: 0; right: 0; bottom: 0;
+            background: rgba( 0, 0, 0,0.1);
+            pointer-events: none;
+            z-index: 0; /* ensure overlay sits behind main content which will be z-index:1 */
+        }
+        .dii-summary { font-size: 18px; font-weight: 700; margin-bottom: 12px; }
+        table { border-collapse: collapse; width: 100%; max-width: 900px; background: rgba(255,255,255,0.98); position: relative; z-index: 1; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; background: #fff; }
+        th { background: white; }
+        .controls { margin: 12px 0; }
+        textarea { width: 100%; height: 160px; }
+    </style>
+</head>
+<body>
+    <div id="test">
+        <div id="summary" class="dii-summary"></div>
+        <div id="diiLegend" style="margin-bottom:12px;color:#333"></div>
+        <div id="diiMessage" style="font-weight:600; margin-bottom:12px;"></div>
+        <div id="tableWrap"></div>
+    </div>
+
+    <script>
+        function renderResults(data) {
+            // data: { items, nutrition, dii }
+            console.log('renderResults called with:', data);
+            const summary = document.getElementById('summary');
+            const tableWrap = document.getElementById('tableWrap');
+            tableWrap.innerHTML = '';
+
+            if (!data || (typeof data !== 'object')) {
+                summary.textContent = '読み込める結果データがありません。JSON形式を確認してください。';
+                return;
+            }
+
+            const dii = data.dii || {};
+            const nutrition = data.nutrition || {};
+
+            if (Object.keys(nutrition).length === 0 && Object.keys(dii).length === 0) {
+                summary.textContent = 'nutrition と dii のいずれもデータがありません。';
+                console.warn('Empty nutrition and dii:', data);
+                return;
+            }
+
+            // 合計 DII を計算（全成分の合計）
+            const totalDii = Object.values(dii).reduce((s, v) => s + (parseFloat(v) || 0), 0);
+            summary.textContent = `あなたのDIIは ${totalDii.toFixed(4)} です。`;
+
+            // DII 判定基準の表示
+            // const diiLegend = document.getElementById('diiLegend');
+            // diiLegend.innerHTML = '';
+            // const lines = [
+            //     '-1.5以下なら抗炎症効果の高い食事ができています。',
+            //     '-0.5以下なら抗炎症効果のある食事ができています。',
+            //     '0.5以下ならあなたの食事炎症性は標準的です。抗炎症性効果の高い食品も取り入れてみましょう。',
+            //     '1.5以下ならあなたの食事の炎症性はやや高いです。炎症性の高い項目を見直し、抗炎症効果のある食品を取り入れましょう。',
+            //     'それ以上ならあなたの食事の炎症性は高いです。炎症性の高い項目を見直して、抗炎症効果のある食品に置き換えてみましょう。'
+            // ];
+            // const ul = document.createElement('ul');
+            // // lines.forEach(l => {
+            // //     const li = document.createElement('li');
+            // //     li.textContent = l;
+            // //     ul.appendChild(li);
+            // // });
+            // diiLegend.appendChild(ul);
+
+            // 単一メッセージを totalDii に基づいて表示（かつ背景色を設定）
+            const diiMessageEl = document.getElementById('diiMessage');
+            let message = '';
+            let bg = '';
+            if (totalDii <= -1.5) {
+                message = '抗炎症効果の高い食事ができています。';
+                bg = 'green';
+            } else if (totalDii <= -0.5) {
+                message = '抗炎症効果のある食事ができています。';
+                bg = 'greenyellow';
+            } else if (totalDii <= 0.5) {
+                message = 'あなたの食事炎症性は標準的です。抗炎症性効果の高い食品も取り入れてみましょう。';
+                bg = 'yellow';
+            } else if (totalDii <= 1.5) {
+                message = 'あなたの食事の炎症性はやや高いです。炎症性の高い項目を見直し、抗炎症効果のある食品を取り入れましょう。';
+                bg = 'orange';
+            } else {
+                message = 'あなたの食事の炎症性は高いです。炎症性の高い項目を見直して、抗炎症効果のある食品に置き換えてみましょう。';
+                bg = 'red';
+            }
+            diiMessageEl.textContent = message;
+            // summary（"あなたのDIIは ..."）とアドバイスの背景色を設定
+            const summaryEl = document.getElementById('summary');
+            summaryEl.style.backgroundColor = bg;
+            summaryEl.style.padding = '6px 8px';
+            summaryEl.style.borderRadius = '6px';
+            // 色の見え方を調整（明るい背景は文字黒、濃い背景は白）
+            const darkTextBackgrounds = ['greenyellow', 'yellow'];
+            const useBlack = darkTextBackgrounds.includes(bg);
+            summaryEl.style.color = useBlack ? 'black' : 'white';
+
+            diiMessageEl.style.backgroundColor = bg;
+            diiMessageEl.style.padding = '6px 8px';
+            diiMessageEl.style.borderRadius = '6px';
+            diiMessageEl.style.color = useBlack ? 'black' : 'white';
+
+            // 表を作成
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            thead.innerHTML = '<tr><th>栄養素</th><th>総量</th><th>DII</th></tr>';
+            table.appendChild(thead);
+            const tbody = document.createElement('tbody');
+
+            // Build union of keys from nutrition and dii (use base names without parentheses)
+            const nutritionKeys = Object.keys(nutrition);
+            const diiKeys = Object.keys(dii);
+            const baseSet = new Set();
+            nutritionKeys.forEach(k => baseSet.add(k.replace(/\s*\(.+\)/, '').trim()));
+            diiKeys.forEach(k => baseSet.add(k.replace(/\s*\(.+\)/, '').trim()));
+
+            const bases = Array.from(baseSet);
+            bases.sort();
+            bases.forEach(base => {
+                const tr = document.createElement('tr');
+                const tdName = document.createElement('td');
+                tdName.textContent = base;
+
+                const tdTotal = document.createElement('td');
+                // find matching nutrition key (exact or startsWith)
+                const nKey = nutritionKeys.find(k => k.replace(/\s*\(.+\)/, '').trim() === base) || nutritionKeys.find(k => k.startsWith(base));
+                let totalVal = '';
+                if (nKey) {
+                    const raw = nutrition[nKey];
+                    const num = parseFloat(raw);
+                    totalVal = !isNaN(num) ? num.toFixed(4) : String(raw);
+                }
+                tdTotal.textContent = totalVal;
+
+                const tdDii = document.createElement('td');
+                tdDii.textContent = (dii && typeof dii[base] !== 'undefined') ? Number(dii[base]).toFixed(6) : '';
+
+                tr.appendChild(tdName);
+                tr.appendChild(tdTotal);
+                tr.appendChild(tdDii);
+                tbody.appendChild(tr);
+            });
+
+            table.appendChild(tbody);
+            tableWrap.appendChild(table);
+        }
+
+        // ファイルアップロードは無効化されているため該当ハンドラは削除しました
+
+        // loadBtn/jsonInput were removed; no manual paste handler required.
+        const loadBtn = document.getElementById('loadBtn');
+        const jsonInput = document.getElementById('jsonInput');
+        if (loadBtn && jsonInput) {
+            loadBtn.addEventListener('click', () => {
+                const txt = jsonInput.value;
+                // if (!txt) return alert('JSON を貼り付けてください');
+                try {
+                    const data = JSON.parse(txt);
+                    renderResults(data);
+                } catch (err) {
+                    // alert('JSON の解析に失敗しました');
+                }
+            });
+        }
+
+        // ページ読み込み時に localStorage の 'dii_results' があれば自動で表示して削除
+        (function autoLoadFromStorage(){
+            try {
+                const raw = localStorage.getItem('dii_results');
+                if (raw) {
+                    const data = JSON.parse(raw);
+                    renderResults(data);
+                    // 一度表示したら削除
+                    localStorage.removeItem('dii_results');
+                }
+            } catch (e) {
+                console.warn('localStorage 読み込みエラー', e);
+            }
+        })();
+    </script>
+</body>
+</html>
