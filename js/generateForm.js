@@ -165,7 +165,7 @@ function generateForm(num) {
             if (isNaN(intakeVal)) intakeVal = 0;
 
             // 無のときは0、その他は multiplier * intakeVal
-            const computed = +(multiplier * intakeVal).toFixed(4);
+            const computed = +(multiplier * intakeVal).toFixed(3);
             setResult(foodKey, computed);
         };
 
