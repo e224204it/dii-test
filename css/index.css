@@ -1,0 +1,93 @@
+/* ======== スマホ縦画面用 栄養テーマデザイン ======== */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Noto Sans JP", sans-serif;
+  background: #f8fff8;
+  overflow: hidden;
+}
+
+/* 全体のスマホ比（iPhone13を基準） */
+.container {
+  position: relative;
+  width: 390px;
+  height: 844px;
+  margin: 0 auto;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 25px rgba(0,0,0,0.15);
+  background: #fff;
+}
+
+/* 背景SVG */
+.fruit-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* コンテンツ中央寄せ */
+.content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  text-align: center;
+}
+
+/* タイトル */
+.content h1 {
+  font-size: 2rem;
+  color: #2e7d32; /* 緑色指定 */
+  margin-bottom: 10px;
+}
+
+/* キャッチコピー */
+.catchphrase {
+  font-size: 1rem;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+/* 作者表記 */
+h3 {
+  color: #666;
+  font-size: 1rem;
+  font-weight: normal;
+  margin-bottom: 40px;
+}
+
+/* スタートボタン */
+.start-btn {
+  border: 2px solid #2e7d32;
+  background: transparent;
+  color: #2e7d32;
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 14px 60px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.start-btn:hover {
+  background: #2e7d32;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+/* 小さい画面対応 */
+@media (max-width: 420px) {
+  .container {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+  }
+}
