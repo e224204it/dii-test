@@ -23,11 +23,11 @@ export function calculateNutrition(results) {
     if (qty === 0 || qty === null || typeof qty === 'undefined') continue
 
     // 緑茶と紅茶は特殊処理のため一旦保存
-    if (foodName.includes('緑茶')) {
+    if (foodName.includes('緑茶湯呑1杯')) {
       greenTeaQty += qty
       continue
     }
-    if (foodName.includes('紅茶') && !foodName.includes('砂糖')) {
+    if (foodName.includes('紅茶カップ1杯')) {
       blackTeaQty += qty
       continue
     }
@@ -54,7 +54,7 @@ export function calculateNutrition(results) {
 
   // 小数点揃え（任意で桁数を変えてください）
   for (const k of Object.keys(totals)) {
-    totals[k] = +totals[k].toFixed(3)
+    totals[k] += totals[k].toFixed(3)
   }
 
   return totals
