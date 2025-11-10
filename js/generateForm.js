@@ -2,7 +2,6 @@ import { foodsOne, foodsTwo, foodsThree, foodsFour, foodsFive, rice } from "./lo
 import { setResult } from "./results.js"
 
 const container = document.getElementById("food-form")
-const foodNames = []
 
 function generateForm(num) {
     let foodsData;
@@ -17,7 +16,7 @@ function generateForm(num) {
     }else{
         foodsData = foodsFive;
     }
-    console.log(`Data for form ${num}:`, foodsData);
+    // console.log(`Data for form ${num}:`, foodsData);
 
     foodsData.forEach((food, index) => {
         // 食品名をh3で表示
@@ -38,6 +37,10 @@ function generateForm(num) {
             { value: 'none', label: '無' }
         ];
 
+    // try to read any existing csv rows for prefill
+    let csvRows = {};
+    try { csvRows = JSON.parse(localStorage.getItem('csv_rows') || '{}'); } catch (e) { csvRows = {}; }
+
     frequencies.forEach(freq => {
             const radioDiv = document.createElement('div');
             
@@ -46,6 +49,22 @@ function generateForm(num) {
             radio.name = `frequency-${food["食品"]}-${index}`;
             radio.id = `${freq.value}-${food["食品"]}-${index}`;
             radio.value = freq.value;
+            // attach human-readable label for saving
+            radio.dataset.label = freq.label;
+
+            // prefill from saved choices or csv_rows if present
+            try {
+                const saved = JSON.parse(localStorage.getItem('survey_choices') || '{}');
+                const csvSaved = csvRows[food["食品"]];
+                // prefer csvSaved if it has a frequencyValue
+                if (csvSaved && csvSaved.摂取頻度 && csvSaved.摂取頻度 === freq.value) {
+                    radio.checked = true;
+                } else if (saved[food["食品"]] && saved[food["食品"]] === freq.label) {
+                    radio.checked = true;
+                }
+            } catch (e) {
+                // ignore
+            }
 
             const label = document.createElement('label');
             label.htmlFor = `${freq.value}-${food["食品"]}-${index}`;
@@ -146,6 +165,30 @@ function generateForm(num) {
         intakeInput.placeholder = '0.5～10';
         intakeInput.value = '1.0'; // デフォルト値を設定
 
+        // CSV 行を保存する共通関数
+        const saveCsvRow = () => {
+            try {
+                const key = food["食品"];
+                let rows = JSON.parse(localStorage.getItem('csv_rows') || '{}');
+                if (!rows || typeof rows !== 'object') rows = {};
+                const selected = frequencyGroup.querySelector(`input[name="frequency-${food["食品"]}-${index}"]:checked`);
+                const freqValue = selected ? selected.value : '';
+                // intake: if hidden (none) then 0, else current numeric value
+                let intakeVal = parseFloat(intakeInput.value);
+                if (isNaN(intakeVal)) intakeVal = 0;
+                // if the frequency is 'none' treat intake as 0
+                if (freqValue === 'none') intakeVal = 0;
+                rows[key] = {
+                    "食品": key,
+                    "摂取頻度": freqValue,
+                    "摂取量": String(intakeVal)
+                };
+                localStorage.setItem('csv_rows', JSON.stringify(rows));
+            } catch (err) {
+                console.warn('Could not save csv row', err);
+            }
+        };
+
         // 計算と結果保存の共通関数
         const computeAndSet = () => {
             const foodKey = food["食品"];
@@ -167,6 +210,8 @@ function generateForm(num) {
             // 無のときは0、その他は multiplier * intakeVal
             const computed = +(multiplier * intakeVal).toFixed(3);
             setResult(foodKey, computed);
+            // save current input state for CSV export
+            saveCsvRow();
         };
 
         // プラスボタン
@@ -226,8 +271,45 @@ function generateForm(num) {
                 }
                 // 選択が変わったら計算して保存
                 computeAndSet();
+                // 保存: 選択ラベルを localStorage に保持
+                try {
+                    const key = food["食品"];
+                    const saved = JSON.parse(localStorage.getItem('survey_choices') || '{}');
+                    saved[key] = e.target.dataset.label || '';
+                    localStorage.setItem('survey_choices', JSON.stringify(saved));
+                } catch (err) {
+                    console.warn('Could not save survey choice', err);
+                }
+                // CSV 行も保存（frequency value と intake）
+                saveCsvRow();
             });
         });
+
+        // If one of the radios is already checked (prefilled from saved choices), update intake visibility and compute
+        const initiallyChecked = frequencyGroup.querySelector(`input[name="frequency-${food["食品"]}-${index}"]:checked`);
+        if (initiallyChecked) {
+            if (initiallyChecked.value === 'none') {
+                intakeLabel.style.display = 'none';
+                inputControlDiv.style.display = 'none';
+            } else {
+                intakeLabel.style.display = 'block';
+                inputControlDiv.style.display = 'flex';
+            }
+            // ensure result is computed for prefilled selection
+            computeAndSet();
+        }
+
+        // prefill intakeInput from csvRows if present
+        try {
+            const csvSaved = csvRows[food["食品"]];
+            if (csvSaved && typeof csvSaved.摂取量 !== 'undefined') {
+                // CSV stores as string; restore to input value
+                const v = parseFloat(csvSaved.摂取量);
+                if (!isNaN(v) && v > 0) intakeInput.value = v.toFixed(1);
+            }
+        } catch (e) {
+            // ignore
+        }
 
         container.appendChild(intakeDiv);
 
