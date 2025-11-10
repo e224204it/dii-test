@@ -10,4 +10,6 @@ const foodsFour = await loadJsonData("./data/foods_data4.json");
 const foodsFive = await loadJsonData("./data/foods_data5.json");
 const rice = await loadJsonData("./data/fortifiedRice.json");
 
+console.log(foodsOne)
+
 export { foodsOne, foodsTwo, foodsThree, foodsFour, foodsFive, rice }
