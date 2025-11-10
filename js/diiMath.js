@@ -9,7 +9,8 @@ export async function calculateDII(nutritionTotals) {
 	const scoreRow = arr.find(r => r['Unnamed: 0'] && r['Unnamed: 0'].toString().toLowerCase() === 'score');
 
 	if (!meanRow || !sdRow || !scoreRow) throw new Error('dii_param.json format not recognized');
-
+	// ここまではわかった
+	
 	// Map nutritionTotals keys by base name (remove parentheses)
 	const nutritionKeyMap = {};
 	Object.keys(nutritionTotals).forEach(k => {
