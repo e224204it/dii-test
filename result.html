@@ -48,10 +48,15 @@
         <div id="tableWrap"></div>
     </div>
 
+    <button id="download">CSVをダウンロード</button>
+
+    <script type="module" src="./js/download.js"></script>
     <script>
         function renderResults(data) {
             // data: { items, nutrition, dii }
             console.log('renderResults called with:', data);
+            // keep reference so download can access even if localStorage was cleared
+            window._lastLoadedDii = data;
             const summary = document.getElementById('summary');
             const tableWrap = document.getElementById('tableWrap');
             tableWrap.innerHTML = '';
