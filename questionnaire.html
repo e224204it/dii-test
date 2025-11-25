@@ -4,35 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-</head>
-<style>
-    html, body { height: 100%; }
-    body {
-        font-family: Arial, "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
-        padding: 24px;
-        margin: 0;
-        background-image: url('img/bg.jpg');
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-attachment: fixed;
-        color: #111;
-    }
-    body::before {
-        content: '';
-        position: fixed;
-        left: 0; top: 0; right: 0; bottom: 0;
-        /* background: rgba(0, 0, 0, 0); */
-        pointer-events: none;
-    }
-</style>
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-    <h1>DIIアプリ</h1>
-    <div id="food-form"></div>
+    <div class="container">
+        <h1>食事アンケート</h1>
+        <div id="progress-container">
+            <p id="progress-text">ページ 1 / 5</p>
+            <div id="progress-bar">
+                <div id="progress-fill"></div>
+            </div>
+        </div>
+        
+        <div id="food-form"></div>
 
-    <script type="module" src="./js/script.js"></script>
-    <script type="module" src="./js/csvJson.js"></script>
+        <div class="navigation">
+            <button id="prevBtn"  disabled>前へ</button>
+            <button id="nextBtn">次へ</button>
+            <button id="finishBtn" style="display: none;">完了</button>
+        </div>
+    </div>
+
+    <script type="module" src="./js/navigation.js"></script>
 </body>
 </html>
