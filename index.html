@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <title>DIIアプリ</title>
   <link rel="stylesheet" href="./css/index.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="container">
     <!-- 背景のフルーツイラスト -->
     <div class="fruit-bg" aria-hidden="true">
       <svg viewBox="0 0 390 844" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-        <!-- 背景グラデーション -->
         <defs>
           <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stop-color="#f6fff6"/>
@@ -21,52 +21,62 @@
             <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#000" flood-opacity="0.1"/>
           </filter>
         </defs>
-
         <rect width="390" height="844" fill="url(#bg)" />
-
-        <!-- 🍎りんご -->
         <g transform="translate(60,120)" filter="url(#drop)">
-          <circle r="28" fill="red" />
+          <circle r="28" fill="#ff6b6b" />
           <rect x="-2" y="-34" width="4" height="10" rx="1.5" fill="#2f7a28"/>
         </g>
-
-        <!-- 🍊みかん -->
         <g transform="translate(310,240)" filter="url(#drop)">
           <circle r="26" fill="#ffa94d" />
-          <circle cx="-8" cy="-4" r="5" fill="#fff3d4" opacity="0.3"/>
-          <path d="M-8 -28 L0 -36 L8 -28 Z" fill="#58b457"/>
         </g>
-
-        <!-- 🍓いちご -->
         <g transform="translate(80,620)" filter="url(#drop)">
           <path d="M0 -26 C16 -22, 22 10, 0 28 C-22 10, -16 -22, 0 -26 Z" fill="#ff4b6b"/>
-          <circle cx="0" cy="0" r="4" fill="#fff" opacity="0.7"/>
           <path d="M-8 -28 L0 -36 L8 -28 Z" fill="#58b457"/>
         </g>
-
-        <!-- 🍋レモン -->
         <g transform="translate(310,700)" filter="url(#drop)">
-          <ellipse rx="28" ry="30" fill="#fff475" />
-          <path d="M-8 -28 L0 -36 L8 -28 Z" fill="#58b457"/>
-        </g>
-
-        <!-- 🍇ぶどう -->
-        <g transform="translate(320,80)" filter="url(#drop)">
-          <circle cx="0" cy="0" r="10" fill="#b388eb"/>
-          <circle cx="12" cy="12" r="10" fill="#a06be4"/>
-          <circle cx="-12" cy="12" r="10" fill="#bb8cf0"/>
-          <path d="M-8 -28 L0 -36 L8 -28 Z" fill="#58b457"/>
+          <ellipse rx="28" ry="20" fill="#fff475" />
         </g>
       </svg>
     </div>
 
     <!-- コンテンツ部分 -->
     <div class="content">
-      <h1>DIIアプリ</h1>
-      <p class="catchphrase">あなたの健康をサポートするアプリです</p>
-      <h3>久留米工業大学　作</h3>
-      <button class="start-btn" onclick="location.href='./questionnaire.html'">スタート</button>
+      <div class="title-area">
+        <h1>DIIアプリ</h1>
+        <p class="catchphrase">あなたの学びをサポートするアプリです</p>
+        <h3>久留米大学・久留米工業大学　作</h3>
+      </div>
+
+      <!-- 入力フォーム -->
+      <form class="user-form">
+        <div class="input-group">
+          <label for="nickname">👤 ニックネーム</label>
+          <input id="nickname" type="text" placeholder="例：けんた" required>
+        </div>
+
+        <div class="input-group">
+          <label for="age">🎂 年齢</label>
+          <input id="age" type="number" min="0" max="120" placeholder="年齢を入力" required>
+        </div>
+
+        <div class="input-group">
+          <label for="gender">🚻 性別</label>
+          <div class="custom-select">
+            <select id="gender" required>
+              <option value="">選択してください</option>
+              <option value="男性">男性</option>
+              <option value="女性">女性</option>
+              <option value="その他">その他</option>
+            </select>
+          </div>
+        </div>
+      </form>
+
+      <!-- スタートボタン -->
+      <a href="questionnaire.html" class="start-btn">スタート</a>
     </div>
   </div>
+
+  <script src="./js/index.js"></script>
 </body>
 </html>
