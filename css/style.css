@@ -1,150 +1,267 @@
-.frequency-group {
+/* ===== 食品タイトル ===== */
+#food-form h3 {
+    margin: 16px 0 8px 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* ===== 摂取頻度（ラジオボタン） ===== */
+.radio-group {
     display: grid;
     grid-template-columns: repeat(3, auto);
-    gap: 10px;
-    margin: 10px auto;
-    width: fit-content;
-    justify-items: center;
     justify-content: center;
-}
-
-.frequency-group div {
-    display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px 18px;
+    margin-top: 6px;
 }
 
-.intake-group {
-    margin: 10px auto;
+.radio-group label {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 4px;
+    font-size: 1rem;
+    white-space: nowrap;
 }
 
-.input-control {
+/* ===== 摂取量入力欄 ===== */
+#food-form [id^="form_"] {
     display: flex;
-    align-items: center;
-    gap: 5px;
     justify-content: center;
-}
-
-.input-control input[type="number"] {
-    width: 80px;
-    padding: 4px 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    text-align: center;
-}
-
-/* 数値入力のスピンボタンを非表示にする */
-.input-control input[type="number"]::-webkit-inner-spin-button,
-.input-control input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-.quantity-btn {
-    width: 25px;
-    height: 25px;
-    border: 1px solid #ccc;
-    background-color: #f8f8f8;
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 6px;
+    margin-top: 8px;
+    font-size: 1rem;
+}
+
+#food-form label[for^="amt_"] {
+    font-weight: 500;
+}
+
+/* ===== 境界線 ===== */
+#food-form > div {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+/* ===== - / + ボタン統一デザイン ===== */
+.amount-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 10px;
     font-size: 18px;
-    line-height: 1;
-    padding: 0;
-}
-
-.quantity-btn:hover {
-    background-color: #e8e8e8;
-}
-
-.quantity-btn:active {
-    background-color: #ddd;
-}
-
-.form-controls {
-    margin-top: 16px;
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-}
-
-.form-controls button {
-    padding: 8px 14px;
-    border-radius: 6px;
-    border: 1px solid #bbb;
-    background: #f4f4f4;
     cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
 }
 
-.form-controls button:hover {
-    background: #eaeaea;
+.amount-btn:hover {
+    background-color: #45a049;
 }
 
-.form-message {
-    color: #b00020;
-    font-weight: 600;
+.amount-btn:active {
+    transform: scale(0.95);
 }
 
-.progress-wrap {
-    max-width: 900px;
-    margin: 0 auto;
+/* ===== 入力ボックス ===== */
+#food-form input[type="number"] {
+    width: 50px;
+    text-align: center;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    padding: 4px;
+}
+
+/* ===== 背景と中央揃え ===== */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-image: url('./../img/bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: Arial, "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+}
+
+body {
+    display: block;
+    overflow-y: auto;
+}
+
+/* ===== コンテナ ===== */
+.container {
+    width: 90%;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 24px;
+    text-align: center;
+    background-color: transparent;
+}
+
+/* ===== 進捗バー ===== */
+#progress-container {
+    width: 90%;
+    margin: 20px auto;
     text-align: center;
 }
 
-.progress-text {
-    font-weight: 700;
+#progress-text {
+    font-size: 1.1em;
+    margin-bottom: 6px;
+    font-weight: bold;
 }
 
-.progress-wrap .progress-bg {
-    margin-left: auto;
-    margin-right: auto;
-    width: 80%;
+#progress-bar {
+    width: 100%;
+    height: 12px;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
-.progress-wrap .progress-bg { background: #eee; height: 10px; border-radius: 6px; overflow: hidden; margin-top: 6px; }
-
-.progress-wrap .progress-bar { height: 100%; background: #4caf50; }
-
-.rice-group {
-    margin: 8px auto 12px auto;
-    padding: 6px 8px;
-    background: #fafafa;
-    border: 1px solid #eee;
-    border-radius: 6px;
-    display: inline-block;
+#progress-fill {
+    width: 20%;
+    height: 100%;
+    background-color: #4CAF50;
+    border-radius: 10px;
+    transition: width 0.4s ease;
 }
 
-.rice-group p {
-    margin: 0 0 6px 0;
-    font-weight: 600;
+/* ===== 米の種類チェックボックス ===== */
+.rice-type-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin: 30px auto;
+    padding: 20px;
+    width: fit-content;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.6);
 }
 
-.rice-group div {
+.rice-type-section h3 {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.rice-type-section label {
     display: flex;
     align-items: center;
     gap: 6px;
-    margin: 4px 0;
+    font-size: 1.05rem;
+    line-height: 1.8;
+    justify-content: flex-start;
 }
 
-hr {
-    margin: 20px 0;
+.rice-type-section input[type="checkbox"] {
+    transform: scale(1.2);
+    margin-right: 8px;
+}
+
+/* ===== 結果ページのテーブル ===== */
+table {
+    margin: 40px auto;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+table, th, td {
+    border: 1px solid #333;
+    font-size: 1rem;
+    text-align: center;
+    padding: 8px 16px;
+}
+
+th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+/* ===== 結果タイトル ===== */
+.result-title {
+    text-align: center;
+    font-size: 1.6rem;
+    font-weight: bold;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+/* ===== ダウンロード/送信ボタン共通デザイン ===== */
+#downloadCsvBtn,
+#sendToSheet {
+    background: linear-gradient(135deg, #6fd67b, #3fa34d);
+    color: #fff;
     border: none;
-    border-top: 3px solid white; /* thicker separator */
-    height: 0;
-}
-
-/* 全体を中央揃えにする */
-body {
+    border-radius: 50px;
+    padding: 12px 26px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+    display: block;
+    margin: 20px auto;
     text-align: center;
 }
 
-/* テーブルセルも中央揃え */
-th, td {
+#downloadCsvBtn:hover,
+#sendToSheet:hover {
+    background: linear-gradient(135deg, #80e18a, #44b858);
+    transform: scale(1.05);
+}
+
+#downloadCsvBtn:active,
+#sendToSheet:active {
+    transform: scale(0.97);
+}
+
+/* スマホ対応 */
+@media (max-width: 480px) {
+    #downloadCsvBtn,
+    #sendToSheet {
+        font-size: 16px;
+        padding: 10px 20px;
+    }
+}
+
+.note-text {
+    font-size: 0.95rem;
+    color: #444;
+    text-align: right;
+    opacity: 0.9;
+
+    background-color: white;
+
+    margin-top: -100px;
+
+    width: fit-content;
+    padding: 4px 12px;
+
+    /* 背景透明 */
+
+    /* 中央寄せ */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.total-dii-box {
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin: 10px 0 20px 0;
     text-align: center;
 }
