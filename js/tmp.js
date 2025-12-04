@@ -6,8 +6,8 @@ let riceTypeSelections = [];
 
 // 進捗バー
 function updateProgress() {
-    const pageInfo = document.getElementById("progress-text");
-    const progressBar = document.getElementById("progress-fill");
+    const pageInfo = document.getElementById("page-info");
+    const progressBar = document.getElementById(".progress");
     if (pageInfo) pageInfo.textContent = `ページ ${currentPage} / ${totalPages}`;
     if (progressBar) progressBar.style.width = `${(currentPage / totalPages) * 100}%`;
 }
@@ -28,7 +28,7 @@ async function showPage(page) {
     if (page === totalPages) {
         // 部分一致で探す
         const riceKey = Object.keys(userSelections).find(k => k.includes("ご飯・もち茶碗軽く1杯"));
-        const riceData = riceKey ? userSelections[riceKey] : null;
+        const riceData = raceKey ? userSelections[riceKey] : null;
         if (riceData && riceData.frequency !== "無") {
             addRiceTypeQuestion(formContainer);
         }
@@ -41,7 +41,6 @@ async function showPage(page) {
 
 function addRiceTypeQuestion(container) {
     const div = document.createElement("div");
-    div.className = "rice-type-section";
     div.innerHTML = `
         <h3>よく食べる米の種類を教えてください。</h3>
         <label><input type="checkbox" name="riceType" value="白米">白米(胚芽米、強化米を含む)</label><br>
